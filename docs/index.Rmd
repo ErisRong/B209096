@@ -1,13 +1,9 @@
 ---
 title: "Assessment"
-author: "eris"
+author: "eris (Zining Rong)"
 date: "2024-11-01"
 output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ## My assessment
 
@@ -15,22 +11,363 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 
+## Total research goal: The Impact of COVID-19 on Maternal Healthcare: Trends in Access to Care, Pregnancy outcomes, Termination numbers and Delivery methods.
+
+## Reasons for choosinng this title: The COVID-19 pandemic introduced unique challenges to healthcare systems globally, significantly impacting both routine and emergency medical services. Maternity care, which is essential and time-sensitive for both maternal and neonatal health, encountered substantial risks due to these disruptions. This study aims to illuminate the adaptations of healthcare systems during crises by examining changes in access to prenatal care, pregnancy outcomes, termination numbers, and delivery methods throughout the pandemic. The goal is to extract lessons that can safeguard maternity services during future emergencies. Emphasizing this issue is crucial, as it highlights both the resilience and vulnerabilities of healthcare delivery under stress, providing important insights for ensuring equitable and effective care for pregnant individuals. Furthermore, understanding these trends can inform the development of policies aimed at mitigating the effects of similar crises on maternal and child health outcomes worldwide.
+## Importing basic packages
+
 ```{r}
+install.packages("ggplot2")
+library(ggplot2)  # Data Visualization
+install.packages("reader")
+library(readr)    # Reading Data
+install.packages("tidyverse")
 library(tidyverse)
+install.packages("knitr") # Dynamically generate reports
+library(knitr)
+install.packages(sf) # Working with geospatial data
+library(sf)
+install.packages("cowplot") # Creating complex ggplot chart layouts
+library(cowplot)
+install.packages("gt") # Creat forms
+library(gt)
+install.packages("glue") # Help creating forms
+library(glue)
+install.packages("here")
+library(here)
+```
+
+## Import downloaded dataset
+
+```{r}
+ante_booking_hb_covid = read.csv("https://www.opendata.nhs.scot/dataset/5314dde5-3e7a-451c-b4e9-0afe96d27ac0/resource/9c18196f-56a5-4847-b7d8-12a8b8d234fd/download/ante_booking_hb_week_20231005.csv")
+gestation_age_covid = read.csv("https://www.opendata.nhs.scot/dataset/998bcfd5-f985-407c-9a71-dea23aaff16e/resource/7f789269-1547-4189-a47d-2a641db84e91/download/gestation_age_20231005.csv")
+termination_hb_covid = read.csv("https://www.opendata.nhs.scot/dataset/15355535-6182-488a-879a-f9f612573173/resource/5a00501e-b78a-40d6-b3e1-d77508866b9c/download/terminations_preg_hb_20231005.csv")
+termination_all = read.csv("https://www.opendata.nhs.scot/dataset/d684d4a5-f7ae-4a1a-ae8d-adf55304274e/resource/09542b6e-2281-42d3-86c2-10aadeee4350/download/residence_estimated_gestation_2023.csv")
+delivery_method_covid = read.csv("https://www.opendata.nhs.scot/dataset/716b6a6f-1538-4e04-b058-42af9f1c4f44/resource/7996d72a-b8a1-4236-b66b-42e3c828a547/download/method_delivery_hb_20231005.csv")
+pre_infection = read.csv("https://www.opendata.nhs.scot/dataset/9251a154-84b2-498d-b59c-646cab588e9f/resource/2dca5eb6-8d9f-4931-b72b-1bdd1366febc/download/case_rate_hb_20211006.csv")
+```
+
+## Import mapping dataset
+
+```{r}
+# -------- Download and unzip the map data --------
+# 1. Open the following link to find the data download page: “https://spatialdata.gov.scot/geonetwork/srv/chi/catalog.search#/metadata/f12c3826-4b4b-40e6-bf4f-77b9ed01dc14”
+
+# 2. Click the "Download" button on the page to download the dataset in Shapefile format (usually a .zip file).
+
+# 3. Once downloaded, unzip the .zip file into the `YourWorkingDirectory/NHS_healthboards_2019/` folder in your working directory. It depends on what is your current working directory, for now, mine is "/Users/rongmu/Desktop/Data sciences for health and biomedical sciences/data_sciences/B209096", you can use code: getwd() to check what is your current working directory
+
+# 4. The unzipped path should contain the following files:
+#    - NHS_healthboards_2019.shp
+#    - NHS_healthboards_2019.shx
+#    - NHS_healthboards_2019.dbf
+#    - NHS_healthboards_2019.prj
+
+# 5. Confirmation of document path (search for the file name"NHS_healthboards_2019.shp")
+file_path = file.choose()
+print(file_path)
+
+# 6. Loading Shapefile data (end in .shp)
+NHS_healthboards = st_read(file_path)
+```
+
+## Research direction 1: Shifts in Antenatal Care Utilization among pregnant women during the COVID-19 period
+
+```{r}
+# Integrate data, Based on two datasets: 'ante_booking_hb_covid', and 'pre_infection'
+# integrate by month, and change the format into Date
+ante_booking = ante_booking_hb_covid %>%
+  mutate(WeekBeginning = ymd(WeekBeginning),
+         Date = format(WeekBeginning, "%Y-%m")) %>%
+  select(-WeekBeginning)
+
+# Group by month (YearMonth) and aggregate the data
+ante_booking_monthly = ante_booking %>%
+  group_by(HB, Date) %>% 
+  summarise(
+    TotalWomenBooking = sum(NumberWomenBooking, na.rm = TRUE),        
+    TotalUnder10Wks = sum(NumberGestationUnder10Wks, na.rm = TRUE), 
+    Total10to12Wks = sum(NumberGestation10to12Wks, na.rm = TRUE),   
+    TotalOver12Wks = sum(NumberGestationOver12Wks, na.rm = TRUE)   
+  )
+
+# Convert the Month column of case_rate to character type
+case_rate = pre_infection %>%
+  mutate(
+    Month = as.character(Month),              # Make sure Month is 'chr'
+    Month = ymd(paste0(Month, "01")),         # Change format into Date format
+    Date = format(Month, "%Y-%m")        # Choose Year and Month
+  ) 
+
+# I tried to delete the original Month here, but it would show as N/A in YearMonth in the final exported data, so I moved this step to the step of integrating the data.
+# Integrate two datasets within "Date" and "HB", "HB" represents for health board, and delete useless/duplicate elements
+ante_case_merged = inner_join(ante_booking_monthly, case_rate, by = c("HB", "Date")) %>% 
+  select(-HBQF, -HBNameQF, -Month, -Country)
+
+# Converted to long format, covering all trimesters
+ante_case_merged_long = ante_case_merged %>%
+  pivot_longer(
+    cols = c(TotalUnder10Wks, Total10to12Wks, TotalOver12Wks),
+    names_to = "GestationStage",
+    values_to = "Appointments"
+  ) %>%
+  filter(!is.na(Appointments)) # Remove missing values (NA) of appointment number
+
+# Formatting stage names
+ante_case_merged_long = ante_case_merged_long %>%
+  mutate(GestationStage = recode(
+    GestationStage,
+    "TotalUnder10Wks" = "<10 Weeks",
+    "Total10to12Wks" = "10-12 Weeks",
+    "TotalOver12Wks" = ">12 Weeks"
+  ))
+
+# Find the peak time of each HB
+covid_peak = ante_case_merged_long %>%
+  group_by(HBName) %>%
+  filter(NumberOfCasesInPregnancy == max(NumberOfCasesInPregnancy, na.rm = TRUE)) %>%
+  select(HBName, Date) %>%
+  distinct() # Keep unique values and avoid duplication
+
+# Added peak markers and ensured that the infection rate field was only used for background information
+ante_case_merged_long = ante_case_merged_long %>%
+  mutate(CovidPeak = ifelse(Date %in% covid_peak$Date, "Peak", "Normal"))
+
+# Use point-line graphs to distinguish between peak periods of the epidemic and draw time trend graphs
+ggplot(ante_case_merged_long, aes(x = Date, y = Appointments, color = GestationStage, group = interaction(GestationStage, HBName))) +
+  geom_line(data = subset(ante_case_merged_long, CovidPeak == "Normal"), size = 1) + # Solid line during off-peak hours
+  geom_line(data = subset(ante_case_merged_long, CovidPeak == "Peak"), linetype = "dotted", size = 1.2) + # Peak period is dotted line
+  geom_point(data = subset(ante_case_merged_long, CovidPeak == "Peak"), size = 2) + # Add dots for Peak hours
+  facet_wrap(~ HBName, scales = "free_y") + # facet wrap by region (HBName)
+  labs(
+    title = "Trends of Pregnancy Appointments with COVID Peak Highlighted",
+    x = "Month",
+    y = "Number of Appointments",
+    color = "Gestation Stage"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(size = 5, angle = 45, hjust = 1), # Reduce font size and keep it slanted
+    legend.position = "right" # Set the legend position to the right
+  )
+
+# The results from research direction 1 provide an analysis of pregnancy appointment trends, uncovering several notable findings throughout the COVID-19 pandemic. Between March and May 2020, a considerable decrease in the number of appointments was observed, especially in the 10–12 weeks gestation timeframe, which coincided with the pandemic's initial phase and significant healthcare service disruptions. Conversely, the number of appointments in the 12 weeks category stayed relatively constant during the pandemic, emphasizing the importance placed on late-stage prenatal care amid this crisis. 
+
+# These patterns indicate that while initial interruptions impacted all gestational stages, the recovery trajectories for early and late pregnancy care were notably different, likely due to diverse levels of urgency and shifting healthcare priorities. This examination explores how the COVID-19 pandemic influenced healthcare access for expectant mothers, indicating that early-stage appointments were more flexible while later-stage appointments showed stability. Subsequent research may focus on the lasting impacts of these disruptions on both maternal and infant health, as well as on developing strategies to strengthen the resilience of healthcare systems.
+```
+
+## Research Direction 2:Gestational Period Shifts Among Pregnant Women During the COVID-19 Pandemic
+```{r}
+# Intergrate Data, based on 'gestation_age_covid' dataset
+# Convert the Month field to date format
+gestation = gestation_age_covid %>%
+  mutate(
+    Month = as.character(Month),              # Make sure Month is 'chr'
+    Month = ymd(paste0(Month, "01")),         # Change format into Date format
+    Date = format(Month, "%Y-%m")             # Choose Year and Month
+  )
+
+# Add categorical columns and adjust the order of the AgeGroup factor
+gestation_classified = gestation %>%
+  mutate(
+    AgeGroup = factor(AgeGroup, levels = c(
+      "Under 20", "20-24", "25-29", "30-34", "35-39", "40 and over"
+    )),
+    GestationCategory = case_when(
+      GestationUnder32Wks > 0 ~ "Very preterm",
+      Gestation32to36Wks > 0 ~ "Moderately preterm",
+      Gestation37to41Wks > 0 ~ "Term",
+      Gestation42WksOrOver > 0 ~ "Post-term",
+      GestationUnknown > 0 ~ "Unknown",
+      TRUE ~ "Other" # If no match
+    )
+  )
+
+# Confirm COVID-19 period time, according to efficient data period in 'pre_infection' dataset
+covid_start = as.Date("2020-03-01")
+covid_end = as.Date("2021-08-01")
+
+# Draw a dot plot to describe the pregnancy situation at different ages during the epidemic, description based on information from Public Heath Scotland
+ggplot(gestation_classified, aes(x = as.Date(Month))) +
+  geom_point(aes(y = Gestation37to41Wks, color = "Term"), size = 1) +  
+  geom_point(aes(y = Gestation32to36Wks, color = "Moderately preterm"), shape = 17, size = 1) +  
+  geom_point(aes(y = GestationUnder32Wks, color = "Very preterm"), shape = 16, size = 1) +  
+  geom_point(aes(y = Gestation42WksOrOver, color = "Post-term"), shape = 18, size = 1) +  
+  # Added shadows during the pandemic
+  annotate(
+    "rect",
+    xmin = covid_start,
+    xmax = covid_end,
+    ymin = 0,
+    ymax = max(gestation_classified$Gestation37to41Wks, na.rm = TRUE),  
+    alpha = 0.2,  # transparency
+    fill = "blue"  # Blue Shade
+  ) +
+  facet_wrap(~ AgeGroup, scales = "free_y") + # Display by age group
+  labs(
+    title = "Changes in Gestation Numbers Among Pregnant Women During the COVID-19 Period",
+    subtitle = "Point trend analysis with COVID-19 period highlighted",
+    x = "Year",
+    y = "Number of Pregnancies",
+    color = "Gestation Category"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 10),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 14, hjust = 0.5),
+    legend.position = "bottom"
+  )
+
+# Results from research direction 2 demonstrate the examination of pregnancy outcomes classified by gestational periods (very preterm, moderately preterm, term, and post-term) across different age cohorts, highlighting noteworthy shifts during the COVID-19 pandemic. Starting in 2020, which marked the beginning of the pandemic, a reduction in the number of pregnancies categorized as moderately preterm and post-term was noted, particularly among women aged 30–34 and 35–39. In comparison, the number of term pregnancies showed relative stability across all age demographics, indicating that normal-term pregnancies were less impacted by the disturbances caused by the pandemic. Notably, there was a marginal rise in very preterm pregnancies in 2020 among the under 20 and 20–24 age brackets, which may signify the varying effects of the pandemic on younger women or associated healthcare difficulties.
+
+# The relative consistency of term pregnancies implies that healthcare systems successfully focused on facilitating normal-term deliveries in spite of significant disruptions. On the other hand, the decrease in moderately preterm and post-term outcomes underscores aspects that may have faced negative consequences, which requires further exploration.
+```
+
+## Research directionn 3: Numbers of termination changes in different HB during Covid-19 period
+
+```{r}
+# Data analysis is based on the 'terminations' and 'terminations_covid' datasets, with the covid period divided according to the 'pre_infection' time period
+
+# Cleaning field names
+terminations = termination_all %>% 
+  rename(HB = HBR)
+
+# Total terminations of pregnancy by health board (all years)
+terminations_normal_summary = terminations %>%
+  group_by(HB) %>%
+  summarise(total_terminations_terminations = sum(NumberofTerminations, na.rm = TRUE))
+
+# Total terminations of pregnancy by health board (during COVID)
+terminations_covid_summary = termination_hb_covid %>%
+  group_by(HB) %>%
+  summarise(total_terminations_covid = sum(NumberTerminations, na.rm = TRUE))
+
+# Merge two datasets
+terminations_summary = left_join(terminations_normal_summary, terminations_covid_summary, by = "HB") %>% 
+  filter(complete.cases(.))
+
+# Clean up map data field names
+health_boards = NHS_healthboards %>%
+  rename(HB = HBCode)
+
+# Merging maps and pregnancy termination data
+health_boards_terminations = health_boards %>%
+  left_join(terminations_summary, by = "HB") %>% 
+  filter(!is.na(total_terminations_terminations) & !is.na(total_terminations_covid))
+
+# Calculate the minimum and maximum values of a uniform color range
+min_value = min(health_boards_terminations$total_terminations_terminations, 
+                 health_boards_terminations$total_terminations_covid, na.rm = TRUE)
+max_value = max(health_boards_terminations$total_terminations_terminations, 
+                 health_boards_terminations$total_terminations_covid, na.rm = TRUE)
+
+# Convert to long format data
+health_boards_long = health_boards_terminations %>%
+  pivot_longer(
+    cols = c(total_terminations_terminations, total_terminations_covid),
+    names_to = "Period",
+    values_to = "Terminations"
+  ) %>%
+  mutate(Period = recode(Period,
+                         total_terminations_terminations = "All Years",
+                         total_terminations_covid = "COVID Period"))
+
+# Create map
+ggplot(data = health_boards_long) +
+  geom_sf(aes(fill = Terminations)) +
+  scale_fill_viridis_c(option = "plasma", name = "Terminations", limits = c(min_value, max_value)) +
+  facet_wrap(~Period) +
+  theme_minimal() +
+  labs(
+    title = "Comparison of Terminations Across Periods",
+    x = "",
+    y = ""
+  )
+# The analysis presented in research direction 3 examines pregnancy terminations, unveiling a notable geographical and temporal pattern when assessing all years in relation to the COVID period. During the COVID timeframe, the overall number of terminations in Scotland appears to have decreased, with the most pronounced reductions occurring in areas situated near 5°W and 4°W, which include densely populated urban centers. This decrease might indicate limited access to healthcare services or shifts in reproductive behavior amid the pandemic. Remarkably, the number of terminations in northern areas (around 58°N) shows only slight variations, implying that rural or less populated regions experienced a reduced effect on termination services.
+
+# The examination of termination trends highlights the disproportionate effects of the COVID-19 pandemic across various geographical locales in Scotland. The observed decrease in urban populations points to possible healthcare access obstacles during the pandemic, such as clinic closures, travel limitations, and reluctance to pursue medical assistance. These results emphasize the importance of improving healthcare accessibility and equity during emergencies, especially in urban settings.
+```
+
+## Research direction 4: Patterns in delivery method during COVID-19: presented in a table
+
+```{r}
+# Data analysis based on 'delivery_method'dataset, and covid period accoding to effecient data region in 'case_rate' dataset
+
+# Add the YearMonth column
+delivery = delivery_method_covid %>% mutate(YearMonth = as.character(Month))
+
+# Group by YearMonth and calculate the sum
+grouped_delivery = delivery %>%
+  group_by(YearMonth) %>%
+  summarise(
+    Total_AllBirths = sum(AllBirths),
+    Total_SpontaneousVaginal = sum(SpontaneousVaginal),
+    Total_AssistedVaginal = sum(AssistedVaginal),
+    Total_CSectionAll = sum(CSectionAll),
+    Total_CSectionElected = sum(CSectionElected),
+    Total_CSectionEmergency = sum(CSectionEmergency),
+    Total_OtherNotKnown = sum(OtherNotKnown),
+    Percent_SpontaneousVaginal = mean(PercentSpontaneousVaginal),
+    Percent_AssistedVaginal = mean(PercentAssistedVaginal),
+    Percent_CSectionAll = mean(PercentCSectionAll),
+    Percent_CSectionElected = mean(PercentCSectionElected),
+    Percent_CSectionEmergency = mean(PercentCSectionEmergency),
+    Percent_OtherNotKnown = mean(PercentOtherNotKnown)
+  )
+# Creating a table using gt
+grouped_delivery %>%
+  gt() %>%
+  tab_header(
+    title = "Monthly Birth Delivery Statistics", # Add a title and subtitle
+  ) %>%
+  fmt_number(
+    columns = vars(Total_AllBirths:Percent_OtherNotKnown),
+    decimals = 2 # Format a number to two decimal places
+  ) %>%
+  tab_spanner(
+  label = "Birth Delivery Counts",
+  columns = vars(Total_AllBirths:Total_OtherNotKnown)
+) %>%
+tab_spanner(
+  label = "Delivery Method Proportions (%)",
+  columns = vars(Percent_SpontaneousVaginal:Percent_OtherNotKnown)
+) %>% # Add column grouping
+  cols_label(
+    YearMonth = "Year-Month",
+    Total_AllBirths = "Total Births",
+    Total_SpontaneousVaginal = "Spontaneous Vaginal",
+    Total_AssistedVaginal = "Assisted Vaginal",
+    Total_CSectionAll = "C-Section (All)",
+    Total_CSectionElected = "C-Section (Elected)",
+    Total_CSectionEmergency = "C-Section (Emergency)",
+    Total_OtherNotKnown = "Other/Unknown",
+    Percent_SpontaneousVaginal = "% Spontaneous Vaginal",
+    Percent_AssistedVaginal = "% Assisted Vaginal",
+    Percent_CSectionAll = "% C-Section (All)",
+    Percent_CSectionElected = "% C-Section (Elected)",
+    Percent_CSectionEmergency = "% C-Section (Emergency)",
+    Percent_OtherNotKnown = "% Other/Unknown"
+  ) %>% # Set column headers
+  tab_style(
+    style = list(
+      cell_fill(color = "lightblue"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(
+      columns = vars(Total_AllBirths)
+    )
+  ) %>%
+  opt_table_font(font = "Arial") %>%
+  opt_table_lines(extent = "all") # Set table font and border
+
+# The findings in research direction 4 indicate that during the COVID-19 outbreak, there was a decrease in total births, dropping from 8,160 in January 2018 to 7,310 by February 2020, with a further reduction to 6,930 in December 2020. Elective C-sections saw a significant decline, reducing from 1,258 in January 2018 to 1,224 in February 2020, and further to 1,244 in December 2020. In contrast, emergency C-sections exhibited relative stability, diminishing only slightly from 1,416 in January 2018 to 1,346 in December 2020. The number of spontaneous vaginal births also declined, moving from 4,430 in January 2018 down to 3,448 by December 2020.
+
+# These patterns suggest that the healthcare system prioritized emergency procedures, as demonstrated by the consistent rates of emergency C-sections compared to elective ones. The overall decline in both total births and spontaneous vaginal deliveries highlights the significant impact of the pandemic on maternity services. This evidence stresses the importance of developing strategies that guarantee the availability of crucial obstetric services during emergencies, while also reducing interruptions to elective operations.
 ```
 
