@@ -20,6 +20,8 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 ## Importing basic packages
 
 ```{r}
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
 install.packages("ggplot2")
 library(ggplot2)  # Data Visualization
 install.packages("reader")
@@ -28,7 +30,7 @@ install.packages("tidyverse")
 library(tidyverse)
 install.packages("knitr") # Dynamically generate reports
 library(knitr)
-install.packages(sf) # Working with geospatial data
+install.packages("sf") # Working with geospatial data
 library(sf)
 install.packages("cowplot") # Creating complex ggplot chart layouts
 library(cowplot)
@@ -67,12 +69,47 @@ pre_infection = read.csv("https://www.opendata.nhs.scot/dataset/9251a154-84b2-49
 #    - NHS_healthboards_2019.dbf
 #    - NHS_healthboards_2019.prj
 
-# 5. Confirmation of document path (search for the file name"NHS_healthboards_2019.shp")
-file_path = file.choose()
-print(file_path)
+# I was stuck on how to import the zip data, so I asked chatgpt to help me do this.
+# load Shapefile 
+library(utils)  # For downloading and unzipping files
 
-# 6. Loading Shapefile data (end in .shp)
-NHS_healthboards = st_read(file_path)
+# 1. Define new download link and target path
+zip_url = "https://maps.gov.scot/ATOM/shapefiles/SG_NHS_HealthBoards_2019.zip"
+zip_file = "SG_NHS_HealthBoards_2019.zip"
+output_dir = "SG_NHS_HealthBoards_2019"
+
+# 2. Download the ZIP file if you haven't already done so
+if (!file.exists(zip_file)) {
+  download.file(zip_url, zip_file, mode = "wb")
+  message("ZIP file downloaded successfully!")
+} else {
+  message("ZIP file already exists, skipping download.")
+}
+
+# 3. Unzip the ZIP file (if not already unzipped)
+if (!dir.exists(output_dir)) {
+  unzip(zip_file, exdir = output_dir)
+  message("ZIP file extracted successfully!")
+} else {
+  message("Output directory already exists, skipping extraction.")
+}
+
+# 4. Finding and loading shapefile data
+shapefile <- list.files(output_dir, pattern = "\\.shp$", full.names = TRUE, recursive = TRUE)
+
+# Make sure you find the .shp file
+if (length(shapefile) == 0) {
+  stop("No Shapefile (.shp) found in the extracted directory. Please check the downloaded ZIP content.")
+}
+
+# Loading Shapefile data
+NHS_healthboards <- st_read(shapefile)
+message("Shapefile loaded successfully!")
+
+# Print data preview
+print(head(NHS_healthboards))
+
+
 ```
 
 ## Research direction 1: Shifts in Antenatal Care Utilization among pregnant women during the COVID-19 period

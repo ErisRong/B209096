@@ -1,0 +1,745 @@
+<!DOCTYPE html
+  SYSTEM "html">
+<html ng-app="gn_search_default" lang="en" id="ng-app">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>SpatialData.gov.scot</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="initial-scale=1.0">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="description" content="SpatialData.gov.scot - Astun Technology">
+      <meta name="keywords" content="GeoNetwork opensource metadata ISO19115 ISO19139 ISO GIS remote sensing data shapefiles spatial data satellite images map maps interactive opengis geospatial CSW reference implementation mapping 19115 19139 geographic z39.50 catalog clearinghouse coverages grid raster data opensource open source network">
+      <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+      <meta name="DC.title" lang="English" content="Scottish Spatial Data Infrastructure">
+      <meta name="DC.creator" content="GeoNetwork Team">
+      <meta name="DC.subject" lang="English" content="GeoNetwork opensource metadata ISO19115 ISO19139 ISO GIS remote sensing data shapefiles spatial data satellite images map maps interactive opengis mapping 19115 19139 geographic z39.50 catalog clearinghouse coverages grid raster data opensource open source network">
+      <meta name="DC.description" lang="English" content="GeoNetwork opensource provides Internet access to interactive maps, satellite imagery and related spatial databases. It's purpose is to improve access to and integrated use of spatial data and information. GeoNetwork opensource allows to easily share spatial data among different users">
+      <meta name="DC.publisher" content="">
+      <meta name="DC.date" content="02-07-2007">
+      <meta name="DC.type" scheme="DCMIType" content="InteractiveResource">
+      <meta name="DC.format" content="text/html; charset=UTF-8">
+      <meta name="DC.language" content="English">
+      <meta name="DC.coverage" content="Global"><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-NQFJ7QL');</script><link rel="icon" sizes="16x16 32x32 48x48" type="image/png" href="../../images/logos/favicon.png">
+      <link href="rss.search?sortBy=changeDate" rel="alternate" type="application/rss+xml" title="SpatialData.gov.scot - Astun Technology">
+      <link href="portal.opensearch" rel="search" type="application/opensearchdescription+xml" title="SpatialData.gov.scot - Astun Technology">
+      <link href="/geonetwork/static/gn_fonts.css?v=7d5081588745d25ce2ee5e4f097d9021e481b38e&amp;" rel="stylesheet" media="all">
+      <link href="/geonetwork/static/gn_search_default.css?v=7d5081588745d25ce2ee5e4f097d9021e481b38e&amp;" rel="stylesheet" media="all">
+      <link href="/geonetwork/static/gn_print_default.css?v=7d5081588745d25ce2ee5e4f097d9021e481b38e&amp;" rel="stylesheet" media="print">
+      <link href="/geonetwork/static/bootstrap-table.min.css?v=7d5081588745d25ce2ee5e4f097d9021e481b38e" rel="stylesheet" media="all">
+      <link href="/geonetwork/static/gn_pickers.css?v=7d5081588745d25ce2ee5e4f097d9021e481b38e&amp;" rel="stylesheet" media="screen">
+      <link href="/geonetwork/static/gn_inspire.css?v=7d5081588745d25ce2ee5e4f097d9021e481b38e&amp;" rel="stylesheet" media="all">
+      <link href="/geonetwork/static/ng-skos.css?v=7d5081588745d25ce2ee5e4f097d9021e481b38e" rel="stylesheet" media="screen">
+      <link href="/geonetwork/static/srv_custom_style.css?v=7d5081588745d25ce2ee5e4f097d9021e481b38e&amp;" rel="stylesheet" media="all">
+   </head>
+   <body data-ng-controller="GnCatController" data-ng-class="[isHeaderFixed ? 'gn-header-fixed' : 'gn-header-relative', isLogoInHeader ? 'gn-logo-in-header' : 'gn-logo-in-navbar', isFooterEnabled ? 'gn-show-footer' : 'gn-hide-footer']"><script type="application/ld+json">{
+        "@context": "http://schema.org/",
+        "@type": "schema:DataCatalog",  
+        "url": "https://spatialdata.gov.scot/geonetwork/srv/",
+        "@id": "https://spatialdata.gov.scot/geonetwork/srv/",
+        "inLanguage":"eng",
+        "name": "SpatialData.gov.scot",
+        "thumbnailUrl": ["../../images/logos/favicon.png"],
+        "description": "GeoNetwork opensource provides Internet access to interactive maps, satellite imagery and related spatial databases. It's purpose is to improve access to and integrated use of spatial data and information. GeoNetwork opensource allows to easily share spatial data among different users"
+      }</script><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NQFJ7QL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+      <div data-gn-alert-manager=""></div>
+      <noscript>
+         <div class="navbar navbar-default gn-top-bar" role="navigation">
+            <div class="container">
+               <div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" title="" aria-expanded="false" aria-controls="navbar"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+               <div id="navbar" class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav" id="topbar-left">
+                     <li><a href="https://spatialdata.gov.scot/geonetwork/srv/"><img class="gn-logo" alt="" src="https://spatialdata.gov.scot/geonetwork/srv/../images/logos/48e84e1c-d7ac-4c19-a03f-2689dc991a51.png">SpatialData.gov.scot</a></li>
+                     <li><a title="" href="https://spatialdata.gov.scot/geonetwork/srv/eng/catalog.search" onclick="location.href=('https://spatialdata.gov.scot/geonetwork/srv/eng/catalog.search#/search');return false;"><i class="fa fa-fw fa-search hidden-sm">&nbsp;</i><span></span></a></li>
+                     <li id="map-menu" class="hidden-nojs"><a title="" href="https://spatialdata.gov.scot/geonetwork/srv/eng/catalog.search#/map"><i class="fa fa-fw fa-globe hidden-sm">&nbsp;</i><span></span></a></li>
+                  </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                     <li><a href="https://spatialdata.gov.scot/geonetwork/srv/eng/catalog.signin" title=""><i class="fa fa-sign-in fa-fw">&nbsp;</i></a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="container page">
+            <div class="row gn-row-main">
+               <div class="col-sm-8 col-sm-offset-2">
+                  <h1>SpatialData.gov.scot</h1>
+                  <p>
+                     
+                     GeoNetwork opensource allows to easily share geographically referenced thematic
+                     information between different organizations. For more information please contact
+                     
+                     
+                  </p>
+                  <p>
+                     GeoNetwork's purpose is:
+                     
+                     To improve access to and integrated use of spatial data and information
+                     To support decision making
+                     To promote multidisciplinary approaches to sustainable development
+                     To enhance understanding of the benefits of geographic information
+                     
+                     
+                  </p><br><br><div class="alert alert-warning" data-ng-hide=""><strong>Warning!</strong> 
+                     <nojs>Javascript is not enabled. Enable it or click
+                        <a href="../search">here to search
+                           </a>
+                        in a degraded mode.
+                        
+                     </nojs>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navbar navbar-default gn-bottom-bar" role="navigation">
+            <ul class="nav navbar-nav">
+               <li class="gn-footer-text"></li>
+               <li><a href="http://geonetwork-opensource.org/"><i class="fa fa-fw">&nbsp;</i><span></span></a></li>
+               <li class="hidden-sm"><a href="https://github.com/geonetwork/core-geonetwork"><i class="fa fa-github">&nbsp;</i><span></span></a></li>
+               <li><a href="/geonetwork/doc/api" title="">&nbsp;</a></li>
+            </ul>
+         </div>
+      </noscript>
+      <div data-ng-include="'../../catalog/views/default/templates/index.html'" class="gn-full"></div><script>var grecaptcha = {render: function() {}};
+        </script><script src="/geonetwork/static/lib.js?v=7d5081588745d25ce2ee5e4f097d9021e481b38e"></script><script src="/geonetwork/static/gn_search_default.js?v=7d5081588745d25ce2ee5e4f097d9021e481b38e&amp;"></script><script src="../../catalog/lib/d3_timeseries/d3.min.js?v=7d5081588745d25ce2ee5e4f097d9021e481b38e"></script><script src="../../catalog/lib/timeline/timeline-zoomable.js?v=7d5081588745d25ce2ee5e4f097d9021e481b38e"></script><link rel="stylesheet" href="../../catalog/lib/timeline/timeline.css">
+      <link rel="stylesheet" href="../../catalog/lib/d3_timeseries/nv.d3.min.css"><script type="text/javascript">
+      var module = angular.module('gn_search');
+    </script><script type="text/javascript">
+        module.config(['gnGlobalSettings',
+        function(gnGlobalSettings) {
+        gnGlobalSettings.isDisableLoginForm = false;
+        gnGlobalSettings.isShowLoginAsLink = false;
+        gnGlobalSettings.isUserProfileUpdateEnabled = true;
+        gnGlobalSettings.isUserGroupUpdateEnabled = true;
+        }]);
+      </script><script type="text/javascript">
+      // Init GN config which is a dependency of gn
+      // in order to be initialized quite early
+      var cfgModule = angular.module('gn_config', []);
+      cfgModule.config(['gnViewerSettings', 'gnSearchSettings', 'gnGlobalSettings',
+      function(gnViewerSettings, gnSearchSettings, gnGlobalSettings) {
+      gnGlobalSettings.init(
+      {
+  "langDetector": {
+    "fromHtmlTag": false,
+    "regexp": "^/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+/([a-z]{3})/",
+    "default": "eng"
+  },
+  "nodeDetector": {
+    "regexp": "^/[a-zA-Z0-9_-]+/([a-zA-Z0-9_-]+)/[a-z]{3}/",
+    "default": "srv"
+  },
+  "serviceDetector": {
+    "regexp": "^(?:/.+)?/.+/[a-z]{2,3}/(.+)",
+    "default": "catalog.search"
+  },
+  "baseURLDetector": {
+    "regexp": "^(/[a-zA-Z0-9_-]+)/[a-zA-Z0-9_-]+/[a-z]{3}/",
+    "default": "/geonetwork"
+  },
+  "mods": {
+    "global": {
+      "humanizeDates": true
+    },
+    "footer": {
+      "enabled": true,
+      "showSocialBarInFooter": false
+    },
+    "header": {
+      "enabled": true,
+      "languages": {
+        "eng": "en"
+      },
+      "isLogoInHeader": false,
+      "logoInHeaderPosition": "left",
+      "fluidHeaderLayout": true,
+      "showGNName": true,
+      "isHeaderFixed": false,
+      "isMenubarAccessible": true
+    },
+    "cookieWarning": {
+      "enabled": true,
+      "cookieWarningMoreInfoLink": "",
+      "cookieWarningRejectLink": ""
+    },
+    "home": {
+      "enabled": true,
+      "appUrl": "../../srv/{{lang}}/catalog.search#/home",
+      "fluidLayout": true,
+      "showMosaic": false,
+      "facetConfig": {
+        "cl_topic.key": {
+          "terms": {
+            "field": "cl_topic.key",
+            "size": 20
+          },
+          "meta": {
+            "decorator": {
+              "type": "icon",
+              "prefix": "fa fa-2x pull-left gn-icon-"
+            }
+          }
+        },
+        "th_httpinspireeceuropaeutheme-theme_tree.key": {
+          "terms": {
+            "field": "th_httpinspireeceuropaeutheme-theme_tree.key",
+            "size": 34
+          },
+          "meta": {
+            "decorator": {
+              "type": "icon",
+              "prefix": "fa fa-2x pull-left gn-icon iti-",
+              "expression": "http://inspire.ec.europa.eu/theme/(.*)"
+            }
+          }
+        },
+        "resourceType": {
+          "terms": {
+            "field": "resourceType",
+            "size": 10
+          },
+          "meta": {
+            "decorator": {
+              "type": "icon",
+              "prefix": "fa fa-2x pull-left gn-icon-"
+            }
+          }
+        }
+      }
+    },
+    "search": {
+      "enabled": true,
+      "appUrl": "../../srv/{{lang}}/catalog.search#/search",
+      "hitsperpageValues": [
+        10,
+        50,
+        100
+      ],
+      "paginationInfo": {
+        "hitsPerPage": 20
+      },
+      "facetsSummaryType": "details",
+      "defaultSearchString": "resourceTitleObject.default.keyword",
+      "facetTabField": "",
+      "facetConfig": {
+        "resourceType": {
+          "terms": {
+            "field": "resourceType",
+            "order": {
+              "_key": "asc"
+            },
+            "size": 5
+          },
+          "meta": {
+            "decorator": {
+              "type": "icon",
+              "prefix": "fa fa-fw gn-icon-"
+            }
+          }
+        },
+        "cat.keyword": {
+          "terms": {
+            "field": "cat.keyword",
+            "size": 5
+          }
+        },
+        "cl_topic.key": {
+          "terms": {
+            "field": "cl_topic.key",
+            "size": 5
+          },
+          "meta": {
+            "decorator": {
+              "type": "icon",
+              "prefix": "fa fa-fw pull-left gn-icon-"
+            }
+          }
+        },
+        "th_httpinspireeceuropaeutheme-theme_tree.key": {
+          "terms": {
+            "field": "th_httpinspireeceuropaeutheme-theme_tree.key",
+            "order": {
+              "_key": "asc"
+            },
+            "size": 5
+          },
+          "meta": {
+            "decorator": {
+              "type": "icon",
+              "prefix": "fa fa-fw gn-icon iti-",
+              "expression": "http://inspire.ec.europa.eu/theme/(.*)"
+            }
+          }
+        },
+        "tag.default": {
+          "terms": {
+            "field": "tag.default",
+            "include": ".*",
+            "size": 5
+          },
+          "meta": {
+            "caseInsensitiveInclude": true
+          }
+        },
+        "OrgForResourceObject.default": {
+          "terms": {
+            "field": "OrgForResourceObject.default",
+            "include": ".*",
+            "size": 5
+          },
+          "meta": {
+            "caseInsensitiveInclude": true
+          }
+        },
+        "creationYearForResource": {
+          "histogram": {
+            "field": "creationYearForResource",
+            "interval": 5,
+            "keyed": true,
+            "min_doc_count": 1
+          },
+          "meta": {
+            "collapsed": true
+          }
+        },
+        "format": {
+          "terms": {
+            "field": "format",
+            "size": 5,
+            "order": {
+              "_key": "asc"
+            }
+          }
+        },
+        "availableInServices": {
+          "filters": {
+            "filters": {
+              "availableInViewService": {
+                "query_string": {
+                  "query": "+linkProtocol:/OGC:WMS.*/"
+                }
+              },
+              "availableInDownloadService": {
+                "query_string": {
+                  "query": "+linkProtocol:/OGC:WFS.*/"
+                }
+              }
+            }
+          }
+        },
+        "cl_spatialRepresentationType.key": {
+          "terms": {
+            "field": "cl_spatialRepresentationType.key",
+            "size": 5
+          }
+        },
+        "cl_maintenanceAndUpdateFrequency.key": {
+          "terms": {
+            "field": "cl_maintenanceAndUpdateFrequency.key",
+            "size": 5
+          }
+        },
+        "resolutionScaleDenominator": {
+          "histogram": {
+            "field": "resolutionScaleDenominator",
+            "interval": 10000,
+            "keyed": true,
+            "min_doc_count": 1
+          },
+          "meta": {
+            "collapsed": true
+          }
+        },
+        "resolutionDistance": {
+          "terms": {
+            "field": "resolutionDistance.key",
+            "size": 5
+          }
+        }
+      },
+      "filters": {},
+      "sortbyValues": [
+        {
+          "sortBy": "relevance",
+          "sortOrder": ""
+        },
+        {
+          "sortBy": "dateStamp",
+          "sortOrder": "desc"
+        },
+        {
+          "sortBy": "createDate",
+          "sortOrder": "desc"
+        },
+        {
+          "sortBy": "resourceTitleObject.default.keyword",
+          "sortOrder": "asc"
+        },
+        {
+          "sortBy": "rating",
+          "sortOrder": "desc"
+        },
+        {
+          "sortBy": "popularity",
+          "sortOrder": "desc"
+        }
+      ],
+      "sortBy": "relevance",
+      "resultViewTpls": [
+        {
+          "tplUrl": "../../catalog/components/search/resultsview/partials/viewtemplates/grid.html",
+          "tooltip": "Grid",
+          "icon": "fa-th"
+        },
+        {
+          "tplUrl": "../../catalog/components/search/resultsview/partials/viewtemplates/list.html",
+          "tooltip": "List",
+          "icon": "fa-bars"
+        }
+      ],
+      "resultTemplate": "../../catalog/components/search/resultsview/partials/viewtemplates/grid.html",
+      "formatter": {
+        "list": [
+          {
+            "label": "defaultView",
+            "url": ""
+          },
+          {
+            "label": "full",
+            "url": "/formatters/xsl-view?root=div&view=advanced"
+          }
+        ],
+        "defaultUrl": ""
+      },
+      "downloadFormatter": [
+        {
+          "label": "exportMEF",
+          "url": "/formatters/zip?withRelated=false",
+          "class": "fa-file-zip-o"
+        },
+        {
+          "label": "exportPDF",
+          "url": "/formatters/xsl-view?output=pdf&language=${lang}",
+          "class": "fa-file-pdf-o"
+        },
+        {
+          "label": "exportXML",
+          "url": "/formatters/xml",
+          "class": "fa-file-code-o"
+        }
+      ],
+      "grid": {
+        "related": [
+          "parent",
+          "children",
+          "services",
+          "datasets"
+        ]
+      },
+      "linkTypes": {
+        "links": [
+          "LINK",
+          "kml"
+        ],
+        "downloads": [
+          "DOWNLOAD"
+        ],
+        "layers": [
+          "OGC",
+          "ESRI:REST"
+        ],
+        "maps": [
+          "ows"
+        ]
+      },
+      "isFilterTagsDisplayedInSearch": false,
+      "usersearches": {
+        "enabled": true,
+        "displayFeaturedSearchesPanel": true
+      },
+      "savedSelection": {
+        "enabled": true
+      },
+      "addWMSLayersToMap": {
+        "urlLayerParam": ""
+      },
+      "advancedSearchTemplate": "../../catalog/views/default/templates/advancedSearchForm/defaultAdvancedSearchForm.html"
+    },
+    "map": {
+      "enabled": true,
+      "appUrl": "../../{{node}}/{{lang}}/catalog.search#/map",
+      "externalViewer": {
+        "enabled": false,
+        "enabledViewAction": false,
+        "baseUrl": "http://www.example.com/viewer",
+        "urlTemplate": "http://www.example.com/viewer?url=${service.url}&type=${service.type}&layer=${service.title}&lang=${iso2lang}&title=${md.defaultTitle}",
+        "openNewWindow": false,
+        "valuesSeparator": ","
+      },
+      "is3DModeAllowed": false,
+      "singleTileWMS": true,
+      "isSaveMapInCatalogAllowed": true,
+      "isExportMapAsImageEnabled": false,
+      "isAccessible": false,
+      "storage": "",
+      "bingKey": "",
+      "listOfServices": {
+        "wms": [],
+        "wmts": []
+      },
+      "projection": "EPSG:27700",
+      "projectionList": [
+        {
+          "code": "urn:ogc:def:crs:EPSG:6.6:4326",
+          "label": "WGS84 (EPSG:4326)"
+        },
+        {
+          "code": "EPSG:3857",
+          "label": "Google mercator (EPSG:3857)"
+        },
+        {
+          "label": "OSGB36 / British National Grid",
+          "code": "EPSG:27700"
+        }
+      ],
+      "switcherProjectionList": [
+        {
+          "label": "OSGB36 / British National Grid",
+          "code": "EPSG:27700",
+          "extent": [
+            -104016.58289487183,
+            -16698.10128148696,
+            688810.1326807912,
+            1256492.322742424
+          ],
+          "worldExtent": [
+            -9,
+            49.75,
+            2.01,
+            61.01
+          ],
+          "resolutions": [],
+          "def": "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +nadgrids=OSTN15_NTv2_OSGBtoETRS.gsb +units=m +no_defs +type=crs"
+        },
+        {
+          "label": "Google Mercator (EPSG:3857)",
+          "code": "EPSG:3857",
+          "extent": [
+            -2399885.518409672,
+            6980364.306378593,
+            1453911.5528436347,
+            8514622.867033372
+          ],
+          "worldExtent": [
+            -9.497321920875406,
+            50,
+            3.6318712443260686,
+            61.46465235941389
+          ],
+          "resolutions": []
+        }
+      ],
+      "disabledTools": {
+        "processes": true,
+        "addLayers": false,
+        "projectionSwitcher": false,
+        "layers": false,
+        "legend": false,
+        "filter": false,
+        "contexts": false,
+        "print": false,
+        "mInteraction": false,
+        "graticule": false,
+        "mousePosition": true,
+        "syncAllLayers": true,
+        "drawVector": false
+      },
+      "defaultTool": "layers",
+      "defaultToolAfterMapLoad": "layers",
+      "graticuleOgcService": {},
+      "map-viewer": {
+        "context": "../../map/config-viewer-search.xml",
+        "extent": [
+          -682855,
+          466783,
+          1222145,
+          1275783
+        ],
+        "layers": []
+      },
+      "map-search": {
+        "context": "../../map/config-viewer-search.xml",
+        "extent": [
+          -708453.4375,
+          -106815.4375,
+          1247743.4375,
+          1849381.4375
+        ],
+        "layers": [],
+        "geodesicExtents": false
+      },
+      "map-editor": {
+        "context": "../../map/config-viewer-search.xml",
+        "extent": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "layers": [
+          {
+            "type": "osm"
+          }
+        ]
+      },
+      "map-thumbnail": {
+        "context": "../../map/config-viewer.xml",
+        "extent": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "layers": []
+      },
+      "autoFitOnLayer": false
+    },
+    "geocoder": {
+      "enabled": true,
+      "appUrl": "https://secure.geonames.org/searchJSON?country=UK"
+    },
+    "recordview": {
+      "enabled": true,
+      "isSocialbarEnabled": false
+    },
+    "editor": {
+      "enabled": true,
+      "appUrl": "../../srv/{{lang}}/catalog.edit",
+      "isUserRecordsOnly": false,
+      "minUserProfileToCreateTemplate": "",
+      "isFilterTagsDisplayed": false,
+      "fluidEditorLayout": true,
+      "createPageTpl": "../../catalog/templates/editor/new-metadata-horizontal.html",
+      "editorIndentType": "",
+      "facetConfig": {
+        "resourceType": {
+          "terms": {
+            "field": "resourceType"
+          },
+          "meta": {
+            "decorator": {
+              "type": "icon",
+              "prefix": "fa fa-fw gn-icon-"
+            }
+          }
+        },
+        "cat.keyword": {
+          "terms": {
+            "field": "cat.keyword"
+          }
+        },
+        "valid": {
+          "terms": {
+            "field": "valid",
+            "size": 10
+          }
+        },
+        "groupOwner": {
+          "terms": {
+            "field": "groupOwner",
+            "size": 200,
+            "include": ".*"
+          },
+          "meta": {
+            "orderByTranslation": true,
+            "filterByTranslation": true,
+            "displayFilter": true,
+            "collapsed": true
+          }
+        },
+        "recordOwner": {
+          "terms": {
+            "field": "recordOwner",
+            "size": 100
+          },
+          "meta": {
+            "orderByTranslation": true,
+            "filterByTranslation": true,
+            "displayFilter": true,
+            "collapsed": true
+          }
+        },
+        "groupPublishedId": {
+          "terms": {
+            "field": "groupPublishedId",
+            "size": 200,
+            "include": ".*"
+          },
+          "meta": {
+            "orderByTranslation": true,
+            "filterByTranslation": true,
+            "displayFilter": true,
+            "collapsed": true
+          }
+        },
+        "documentStandard": {
+          "terms": {
+            "field": "documentStandard",
+            "size": 10
+          },
+          "meta": {
+            "collapsed": true
+          }
+        },
+        "isHarvested": {
+          "terms": {
+            "field": "isHarvested",
+            "size": 2
+          },
+          "meta": {
+            "collapsed": true
+          }
+        },
+        "isTemplate": {
+          "terms": {
+            "field": "isTemplate",
+            "size": 5
+          },
+          "meta": {
+            "collapsed": true
+          }
+        },
+        "isPublishedToAll": {
+          "terms": {
+            "field": "isPublishedToAll",
+            "size": 2
+          }
+        }
+      }
+    },
+    "admin": {
+      "enabled": true,
+      "appUrl": "../../srv/{{lang}}/admin.console"
+    },
+    "signin": {
+      "enabled": true,
+      "appUrl": "../../srv/{{lang}}/catalog.signin"
+    },
+    "signout": {
+      "appUrl": "../../srv/{{lang}}/signout"
+    },
+    "page": {
+      "enabled": true,
+      "appUrl": "../../{{node}}/{{lang}}/catalog.search#/page"
+    }
+  }
+},
+      // Relative path is safer as even if settings are wrong, the client app works.
+      null,
+      "https://spatialdata.gov.scot/geonetwork/srv/",
+      gnViewerSettings, gnSearchSettings);
+      }]);
+    </script></body>
+</html>
