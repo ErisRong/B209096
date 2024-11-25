@@ -5,7 +5,7 @@ date: "2024-11-01"
 output: html_document
 ---
 ```{r}
-# Total research goal: The Impact of COVID-19 on Maternal Healthcare: Trends in Access to Care, Pregnancy outcomes, and Termination numbers.
+# Total research goal: "The Impact of COVID-19 on Maternal Healthcare: Trends in Access to Care, Pregnancy outcomes, and Termination numbers."
 ```
 
 ```{r}
