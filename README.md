@@ -1,5 +1,5 @@
 # B209096
-# Project Title: Analysis of [The Impact of COVID-19 on Maternal Healthcare: Trends in Access to Care, Pregnancy outcomes, Termination numbers and Delivery methods.c]
+# Project Title: Analysis of [The Impact of COVID-19 on Maternal Healthcare: Trends in Access to Care, Pregnancy outcomes, and Termination numbers]
 
 ## GitHub Pages
 This project is published on GitHub Pages: [https://erisrong.github.io/B209096/](https://erisrong.github.io/B209096/)
